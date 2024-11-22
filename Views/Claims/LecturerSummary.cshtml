@@ -1,0 +1,119 @@
+﻿@model IEnumerable<CMS.Models.LecturerSummaryViewModel>
+
+@{
+    ViewData["Title"] = "Lecturer Claims Summary";
+}
+
+<style>
+    /* Dark theme for body and general styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #121212; /* Dark background */
+        background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEDBtz7POp7XtbIvrstzwpCl5_ZUwlsk6mTw&s);
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        color: white; /* White text for contrast */
+        margin: 0;
+        padding: 20px;
+    }
+
+    /* Content container styling */
+    .content-wrapper {
+        background-color: rgba(18, 18, 18, 0.9); /* Semi-transparent dark background */
+        border-radius: 15px;
+        padding: 20px;
+        margin: 30px auto;
+        max-width: 1200px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Heading styling */
+    h1 {
+        text-align: center;
+        color: white; /* White color for heading */
+        margin-bottom: 20px;
+    }
+
+    /* Table styling */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background-color: #333333; /* Dark background for table */
+        color: white; /* White text in table */
+        border: 1px solid #555;
+    }
+
+        .table th {
+            background-color: #007BFF; /* Blue header */
+            color: white;
+        }
+
+        .table td, .table th {
+            text-align: center;
+            vertical-align: middle;
+            padding: 12px;
+            border-bottom: 1px solid #555; /* Dark borders */
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #444444; /* Darker rows for better contrast */
+        }
+
+        .table tbody tr:hover {
+            background-color: #555555; /* Hover effect for table rows */
+        }
+
+    /* Button styling */
+    .btn-primary {
+        background-color: #007BFF;
+        border-color: #007BFF;
+        color: white; /* White text in button */
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+</style>
+
+<div class="content-wrapper">
+    <h1 class="text-center">Lecturer Claims Summary</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Lecturer Name</th>
+                <th>Total Owed</th>
+                <th>Total Hours Worked</th>
+                <th>Average Hourly Rate</th>
+                <th>Additional Notes</th>
+                <th>Last Submitted Date</th>
+                <th>Download Report</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.LecturerName</td>
+                    <td>@item.TotalOwed.ToString("C")</td>
+                    <td>@item.HoursWorked</td>
+                    <td>@item.HourlyRate.ToString("C")</td>
+                    <td>@item.AdditionalNotes</td>
+                    <td>@item.SubmittedDate.ToShortDateString()</td>
+                    <td>
+                        <a href="@Url.Action("DownloadLecturerReport", "Claims", new { lecturerName = item.LecturerName })" class="btn btn-primary">
+                            Download Report
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

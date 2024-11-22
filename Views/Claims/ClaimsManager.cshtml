@@ -1,0 +1,160 @@
+﻿@model IEnumerable<CMS.Models.Claim>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Claims (Academic Manager)</title>
+    <style>
+        /* General body styling for dark theme */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212; /* Dark background */
+            color: white; /* White text */
+        }
+
+        /* Transparent container for the form/table with a dark background */
+        .container {
+            background-color: rgba(18, 18, 18, 0.8); /* Semi-transparent dark background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Heading style */
+        h2 {
+            font-size: 24px;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Table styling */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #333333; /* Dark background for table */
+            border: 1px solid #444444; /* Border color */
+        }
+
+            .table thead {
+                background-color: #007bff; /* Blue background for header */
+                color: white;
+            }
+
+            .table th,
+            .table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #444444;
+            }
+
+            /* Alternate row background color for better readability */
+            .table tbody tr:nth-child(odd) {
+                background-color: #222222;
+            }
+
+            /* Hover effect on table rows */
+            .table tbody tr:hover {
+                background-color: #444444;
+            }
+
+        /* Button styling */
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Approve button (success) */
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+            .btn-success:hover {
+                background-color: #218838;
+            }
+
+        /* Reject button (danger) */
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+        /* Link styling for supporting document */
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            a:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2> Approval List</h2>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Lecturer Name</th>
+                    <th>Hours Worked</th>
+                    <th>Hourly Rate</th>
+                    <th>Notes</th>
+                    <th>Status</th>
+                    <th>Supporting Document</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var claim in Model)
+                {
+                    <tr>
+                        <td>@claim.LecturerName</td>
+                        <td>@claim.HoursWorked</td>
+                        <td>@claim.HourlyRate</td>
+                        <td>@claim.AdditionalNotes</td>
+                        <td>@claim.Status</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(claim.SupportingDocumentPath))
+                            {
+                                var SupportingDocumentPath = System.IO.Path.GetFileName(claim.SupportingDocumentPath);
+                                <span>@SupportingDocumentPath</span> <!-- Display the file name as plain text -->
+                            }
+                        </td>
+                        <td>
+                            <form asp-action="ApproveClaim" method="post" style="display:inline;">
+                                <input type="hidden" name="ClaimId" value="@claim.ClaimId" />
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                            <form asp-action="RejectClaim" method="post" style="display:inline;">
+                                <input type="hidden" name="ClaimId" value="@claim.ClaimId" />
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
